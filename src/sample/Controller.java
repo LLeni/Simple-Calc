@@ -4,6 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class Controller {
     @FXML
     TextField fieldInput;
@@ -17,47 +20,71 @@ public class Controller {
     Button buttonDot, buttonZero, buttonEqual, buttonPlus;
 
     public void solve(){
+        ArrayDeque<Double> numbers = new ArrayDeque<>();
+        ArrayDeque<Character> operations = new ArrayDeque<>();
         char[] equation = fieldInput.getText().toCharArray();
-        String firstValueStr = null;
-        String secondValueStr = null;
-        String preparation = null;
-        char operation;
-        for (char c:
-             equation) {
-           if(true) {
-
-                if (String.valueOf(c).matches("/d")) {
-                    firstValueStr += c;
-                } else {
-                    operation = c;
-                }
+        String numberStr = "";
+        for (char c :
+                equation) {
+            if(String.valueOf(c).matches("[0123456789.]")){
+                numberStr += c;
             } else {
-                if (String.valueOf(c).matches("/d")) {
-                    firstValueStr += c;
-                } else {
-                    firstValueStr = doSubOperation(Double.valueOf(firstValueStr), Double.valueOf(secondValueStr), operation);
-                    operation += c;
-                }
+                operations.addFirst(c);
+                numbers.addFirst(Double.valueOf(numberStr));
+                numberStr = "";
             }
         }
-        System.out.println("Ddd");
+        numbers.addFirst(Double.valueOf(numberStr));
+        int countOperations = operations.size();
+        for (int i = 0; i < countOperations; i++) {
+
+            numbers.addLast(doSubOperation(numbers.pollLast(), numbers.pollLast(), operations.pollLast()));
+        }
+        fieldInput.setText(String.valueOf(numbers.pollLast()));
+
+//        double firstValue;
+//        double secondValue;
+//        String preparation = null;
+//        char operation;
+//        for (char c:
+//             equation) {
+//           if(true) {
+//
+//                if (String.valueOf(c).matches("/d")) {
+//                    preparation += c;
+//                } else {
+//                    operation = c;
+//                }
+//            } else {
+//                if (String.valueOf(c).matches("/d")) {
+//                    preparation += c;
+//                } else {
+//                    firstValueStr = doSubOperation(Double.valueOf(firstValueStr), Double.valueOf(secondValueStr), operation);
+//                    operation += c;
+//                }
+//            }
+//        }
+//        System.out.println("Ddd");
+
     }
 
-    private double doSubOperation(double first, double second, String operation){
+    private double doSubOperation(double first, double second, char operation){
+        double result = 0;
         switch (operation){
-            case "+":
-                  return Operation.PLUS.eval(first,second);
+            case '+':
+                  result = Operation.PLUS.eval(first,second);
                 break;
-            case "-":
-                return Operation.MINUS.eval(first,second);
+            case '-':
+                result = Operation.MINUS.eval(first,second);
             break;
-            case "*":
-                return Operation.MINUS.eval(first,second);
+            case '*':
+                result = Operation.MINUS.eval(first,second);
             break;
-            case "/":
-                return Operation.DIVIDE.eval(first,second);
+            case '/':
+                result = Operation.DIVIDE.eval(first,second);
             break;
         }
+        return result;
     }
 
     @FXML
