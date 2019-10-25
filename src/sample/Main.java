@@ -10,6 +10,10 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+    private final int WIDTH_STAGE = 200;
+    private final int HEIGHT_STAGE = 225;
+
+
     TextField textField;
     Button buttonOne;   Button buttonTwo;   Button buttonThree; Button buttonDivide;
     Button buttonFour;  Button buttonFive;  Button buttonSix;   Button buttonMulti;
@@ -27,7 +31,11 @@ public class Main extends Application {
         buttonDot = new Button("."); buttonZero = new Button("0"); buttonEqual = new Button("="); buttonPlus = new Button("+");
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Simple Calc");
-        primaryStage.setScene(new       Scene(root, 300, 275));
+        primaryStage.setScene(new       Scene(root, WIDTH_STAGE, HEIGHT_STAGE));
+        primaryStage.setMinWidth(WIDTH_STAGE);
+        primaryStage.setMaxWidth(WIDTH_STAGE);
+        primaryStage.setMinHeight(HEIGHT_STAGE);
+        primaryStage.setMaxHeight(HEIGHT_STAGE);
         primaryStage.show();
     }
 
